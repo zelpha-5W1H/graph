@@ -22,7 +22,7 @@ def plot_line_segment(p1, p2, scaling_factor=1):
 
 
 
-class Vertice():
+class Vertex():
     def __init__(self, id, value, paths=None):
         self.id = id
         self.value = value
@@ -34,32 +34,32 @@ class Graph:
         self.vertices = vertices
         self.ids = []
         self.all_paths = []
-        for vertice in vertices:
-            self.ids.append(vertice.id)
-            for path in vertice.paths:
-                full_path = (vertice.id, path[0], path[1])
+        for vertex in vertices:
+            self.ids.append(vertex.id)
+            for path in vertex.paths:
+                full_path = (vertex.id, path[0], path[1])
                 if full_path not in self.all_paths:
                     self.all_paths.append(full_path)
     
 
-    def add_vertice(self, vertice):
-        if vertice.id in self.ids:
+    def add_vertex(self, vertex):
+        if vertex.id in self.ids:
             print("Please enter an unique ID")
             return None
-        self.vertices.append(vertice)
-        self.ids.append(vertice.id)
+        self.vertices.append(vertex)
+        self.ids.append(vertex.id)
 
-    def get_vertice(self, id):
-        for vertice in self.vertices:
-            if vertice.id == id:
-                return vertice
+    def get_vertex(self, id):
+        for vertex in self.vertices:
+            if vertex.id == id:
+                return vertex
 
     def add_path(self, id1, id2, path_cost):
         if id1 not in self.ids or id2 not in self.ids:
             print("Vertices with the given ids do not exist in this graph")
             return None
 
-        vertice1, vertice2 = self.get_vertice(id1), self.get_vertice(id2)
+        vertex1, vertex2 = self.get_vertex(id1), self.get_vertex(id2)
         existance_of_copy = False
         for i, path in enumerate(self.all_paths):
             if path[0] == id1 and path[1] == id2:
@@ -68,18 +68,18 @@ class Graph:
                 previous_cost = path[2]
                 break
         if existance_of_copy:
-            vertice1.paths[vertice1.paths.index((id2, previous_cost))] = (id2, path_cost)
-            vertice2.paths[vertice2.paths.index((id1, previous_cost))] = (id1, path_cost)
+            vertex1.paths[vertex1.paths.index((id2, previous_cost))] = (id2, path_cost)
+            vertex2.paths[vertex2.paths.index((id1, previous_cost))] = (id1, path_cost)
         else:
             self.all_paths.append((id1, id2, path_cost))
-            vertice1.paths.append((id2, path_cost))
-            vertice2.paths.append((id1, path_cost))
+            vertex1.paths.append((id2, path_cost))
+            vertex2.paths.append((id1, path_cost))
 
         print("Path added succesfully")
 
 
     def bar_visuals(self):
-        values = [vertice.value for vertice in self.vertices]
+        values = [vertex.value for vertex in self.vertices]
         sns.barplot(pd.DataFrame({
             'IDs': self.ids,
             'Values': values
@@ -94,14 +94,14 @@ class Graph:
         ax.scatter(x, y)
 
         # Annotate each vertice with its ID and Value
-        for i, vertice in enumerate(self.vertices):
-            ax.annotate('ID: {}, Value: {}'.format(vertice.id, vertice.value), (x[i], y[i]), textcoords="offset points", xytext=(0,10), ha='center')
-            vertice.circle_coordinates = (x[i], y[i])
+        for i, vertex in enumerate(self.vertices):
+            ax.annotate('ID: {}, Value: {}'.format(vertex.id, vertex.value), (x[i], y[i]), textcoords="offset points", xytext=(0,10), ha='center')
+            vertex.circle_coordinates = (x[i], y[i])
 
         # Draw paths
         for path in self.all_paths:
-            p1 = self.get_vertice(path[0]).circle_coordinates
-            p2 = self.get_vertice(path[1]).circle_coordinates
+            p1 = self.get_vertex(path[0]).circle_coordinates
+            p2 = self.get_vertex(path[1]).circle_coordinates
             path_cost = path[2]
             plot_line_segment(p1, p2)
             plt.annotate('{}'.format(path_cost), get_midpoint(p1, p2), textcoords="offset points", xytext=(0, 0.01), ha='center')
@@ -114,9 +114,9 @@ class Graph:
     def get_detailed_dataframe(self):
         values = []
         paths = []
-        for vertice in self.vertices:
-            values.append(vertice.value)
-            paths.append(vertice.paths)
+        for vertex in self.vertices:
+            values.append(vertex.value)
+            paths.append(vertex.paths)
         return pd.DataFrame({
             "IDs": self.ids,
             "Values": values,
