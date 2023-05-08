@@ -15,10 +15,8 @@ def get_midpoint(p1, p2):
 
 def plot_line_segment(p1, p2, scaling_factor=1):
     L = get_distance(p1, p2)
-    direction = (p2 - p1) / L
-    arrow_start = p1 + (1 - scaling_factor) * direction * L
-    arrow_end = p1 + scaling_factor * direction * L
-    plt.arrow(arrow_start[0], arrow_start[1], arrow_end[0] - arrow_start[0], arrow_end[1] - arrow_start[1], head_width=0, color='black')
+    p2_m = ((p1[0]*(1-scaling_factor) + p2[0]*scaling_factor), (p1[1]*(1-scaling_factor) + p2[1]*scaling_factor))
+    plt.arrow(p1[0], p1[1], p2_m[0], p2_m[1], head_width=0, color='black')
 
 
 
