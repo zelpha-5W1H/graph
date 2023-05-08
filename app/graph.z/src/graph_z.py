@@ -105,8 +105,8 @@ class Graph:
             plt.annotate('{}'.format(path_cost), get_midpoint(p1, p2), textcoords="offset points", xytext=(0, 0.01), ha='center')
 
 
-        ax.set_xlim(-1.25, 1.25)
-        ax.set_ylim(-1.25, 1.25)
+        ax.set_xlim(-2, 2)
+        ax.set_ylim(-2, 2)
         plt.show()
 
     def get_detailed_dataframe(self):
