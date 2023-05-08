@@ -9,7 +9,7 @@ def get_distance(p1, p2):
     return np.sqrt(sum([(p2_coordinate - p1_coordinate) ** 2 for p1_coordinate, p2_coordinate in zip(p1, p2)]))
 
 def get_midpoint(p1, p2):
-    return tuple((p1 + p2) / 2)
+    return ((p1[0]+p2[0])/2, (p1[1]+p2[1])/2)
 
 
 
