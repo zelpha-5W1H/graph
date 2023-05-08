@@ -8,7 +8,7 @@ setup(
     version="0.0.1",
     description="Structures to play with graphs",
     package_dir={"": "app"},
-    packages=find_packages(where="app"),
+    packages=find_packages(),
     long_description="./app/README.md",
     long_description_content_type="text/markdown",
     url="",
