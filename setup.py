@@ -4,7 +4,7 @@ with open("app/README.md", "r") as f:
     long_description = f.read()
 
 setup(
-    name="graph_z",
+    name="graph_z_c",
     version="0.0.1",
     description="Structures to play with graphs",
     package_dir={"": "app"},
