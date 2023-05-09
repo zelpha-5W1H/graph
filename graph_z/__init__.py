@@ -1,4 +1,5 @@
 from .graph_z import (
     Vertex,
-    Graph
+    Graph,
+    generate_random_graph
 )

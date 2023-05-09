@@ -119,6 +119,31 @@ class Graph:
         })
 
 
+def generate_random_graph(num_vertices, num_paths=0, value_range=(0, 10), path_cost_range=(1, 10), random_ids=False,):
+
+    vertex_values = np.random.randint(*value_range, size=num_vertices)
+    if random_ids:
+        vertex_ids = np.random.randint(0, 2**16, size=num_vertices)
+    else:
+        vertex_ids = np.arange(1, num_vertices+1, 1)
+    
+    graph = Graph()
+    for i in range(num_vertices):
+        vertex = Vertex(vertex_ids[i], vertex_values[i])
+        graph.add_vertex(vertex)
+    
+    path_costs = np.random.randint(*path_cost_range, size=num_paths)
+    for i in range(num_paths):
+        vertex_ids = [v.id for v in graph.vertices]  # get list of vertex IDs in the graph
+        rand_id1, rand_id2 = np.random.choice(vertex_ids, size=2, replace=False)
+        graph.add_path(rand_id1, rand_id2, path_costs[i])
+    
+    return graph
+
+
+    
+
+    
 
 
 
