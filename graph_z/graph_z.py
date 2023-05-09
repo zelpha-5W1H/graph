@@ -83,30 +83,27 @@ class Graph:
             'Values': values
         }), x='IDs', y='Values')
 
-    def circle_visuals(self):
-        n = len(self.vertices) # Number of vertices
-        angles = np.array([(2*np.pi)*k/n for k in range(n)])
-        x = np.cos(angles)
-        y = np.sin(angles)
+
+    def plot_graph(self):
         fig, ax = plt.subplots()
+        ax.set_aspect('equal')
+
+        n = len(self.vertices)
+        theta = np.linspace(0, 2*np.pi, n, endpoint=False)
+        x, y = np.cos(theta), np.sin(theta)
+
+        # Plot the vertices
         ax.scatter(x, y)
-
-        # Annotate each vertice with its ID and Value
         for i, vertex in enumerate(self.vertices):
-            ax.annotate('ID: {}, Value: {}'.format(vertex.id, vertex.value), (x[i], y[i]), textcoords="offset points", xytext=(0,10), ha='center')
-            vertex.circle_coordinates = (x[i], y[i])
+            ax.annotate(f"{vertex.id}:{vertex.value}", (x[i], y[i]))
 
-        # Draw paths
-        for path in self.all_paths:
-            p1 = self.get_vertex(path[0]).circle_coordinates
-            p2 = self.get_vertex(path[1]).circle_coordinates
-            path_cost = path[2]
-            plot_line_segment(p1, p2)
-            plt.annotate('{}'.format(path_cost), get_midpoint(p1, p2), textcoords="offset points", xytext=(0, 0.01), ha='center')
+        # Plot the edges
+        for id1, id2, cost in self.all_paths:
+            vertex1, vertex2 = self.get_vertex(id1), self.get_vertex(id2)
+            i1, i2 = self.ids.index(id1), self.ids.index(id2)
+            ax.plot([x[i1], x[i2]], [y[i1], y[i2]])
+            ax.annotate(cost, ((x[i1]+x[i2])/2, (y[i1]+y[i2])/2))
 
-
-        ax.set_xlim(-2, 2)
-        ax.set_ylim(-2, 2)
         plt.show()
 
     def get_detailed_dataframe(self):
@@ -120,3 +117,9 @@ class Graph:
             "Values": values,
             "Paths (id, cost)": paths,
         })
+
+
+
+
+
+
