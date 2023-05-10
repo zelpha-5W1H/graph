@@ -58,7 +58,7 @@ class Graph:
         vertex1, vertex2 = self.get_vertex(id1), self.get_vertex(id2)
         existance_of_copy = False
         for i, path in enumerate(self.all_paths):
-            if path[0] == id1 and path[1] == id2:
+            if (path[0] == id1 and path[1] == id2) or (path[0] == id2 and path[1] == id1):
                 existance_of_copy = True
                 self.all_paths[i] = (id1, id2, path_cost)
                 previous_cost = path[2]
@@ -131,7 +131,7 @@ class Graph:
         })
 
 
-def generate_random_graph(num_vertices, num_paths=0, value_range=(0, 10), path_cost_range=(1, 10), random_ids=False,):
+def generate_random_graph(num_vertices, num_paths=0, value_range=(0, 10), path_cost_range=(1, 10), random_ids=False):
 
     vertex_values = np.random.randint(*value_range, size=num_vertices)
     if random_ids:
