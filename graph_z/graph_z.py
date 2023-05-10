@@ -12,7 +12,6 @@ def get_midpoint(p1, p2):
     return ((p1[0]+p2[0])/2, (p1[1]+p2[1])/2)
 
 
-
 def plot_line_segment(p1, p2, scaling_factor=1):
     L = get_distance(p1, p2)
     p2_m = ((p1[0]*(1-scaling_factor) + p2[0]*scaling_factor), (p1[1]*(1-scaling_factor) + p2[1]*scaling_factor))
@@ -25,7 +24,6 @@ class Vertex():
         self.id = id
         self.value = value
         self.paths = paths or []
-        self.circle_coordinates = (0, 0)
 
 class Graph:
     def __init__(self, vertices=[]):
@@ -52,7 +50,7 @@ class Graph:
             if vertex.id == id:
                 return vertex
 
-    def add_path(self, id1, id2, path_cost):
+    def add_path(self, id1, id2, path_cost, message=True):
         if id1 not in self.ids or id2 not in self.ids:
             print("Vertices with the given ids do not exist in this graph")
             return None
@@ -72,8 +70,8 @@ class Graph:
             self.all_paths.append((id1, id2, path_cost))
             vertex1.paths.append((id2, path_cost))
             vertex2.paths.append((id1, path_cost))
-
-        print("Path added succesfully")
+        if message:
+            print("Path added succesfully")
 
 
     def bar_visuals(self):
@@ -84,25 +82,39 @@ class Graph:
         }), x='IDs', y='Values')
 
 
-    def plot_graph(self):
+    def plot_graph(self, show_path=True):
         fig, ax = plt.subplots()
         ax.set_aspect('equal')
 
-        n = len(self.vertices)
-        theta = np.linspace(0, 2*np.pi, n, endpoint=False)
-        x, y = np.cos(theta), np.sin(theta)
-
+        num_vertices = len(self.vertices)
+        num_circles = int(np.floor(num_vertices/4))
+        extras = num_vertices%4
+        theta = np.linspace(0, 2*np.pi, 4, endpoint=False)
+        theta_last = np.linspace(0, 2*np.pi, extras, endpoint=False)
+        x, y = np.array([]), np.array([])
+        for r in range(1, num_circles+1):
+            if r%2 != 0:
+                x = np.concatenate((x, r*np.cos(theta)))
+                y = np.concatenate((y, r*np.sin(theta)))
+            else:
+                x = np.concatenate((x, r*np.cos(theta + np.pi/4)))
+                y = np.concatenate((y, r*np.sin(theta + np.pi/4)))
+            
+        x = np.concatenate((x, (num_circles+1)*np.cos(theta_last)))
+        y = np.concatenate((y, (num_circles+1)*np.sin(theta_last)))
+                        
         # Plot the vertices
         ax.scatter(x, y)
         for i, vertex in enumerate(self.vertices):
             ax.annotate(f"{vertex.id}:{vertex.value}", (x[i], y[i]))
 
-        # Plot the edges
-        for id1, id2, cost in self.all_paths:
-            vertex1, vertex2 = self.get_vertex(id1), self.get_vertex(id2)
-            i1, i2 = self.ids.index(id1), self.ids.index(id2)
-            ax.plot([x[i1], x[i2]], [y[i1], y[i2]])
-            ax.annotate(cost, ((x[i1]+x[i2])/2, (y[i1]+y[i2])/2))
+        if show_path:
+            # Plot the edges
+            for id1, id2, cost in self.all_paths:
+                vertex1, vertex2 = self.get_vertex(id1), self.get_vertex(id2)
+                i1, i2 = self.ids.index(id1), self.ids.index(id2)
+                ax.plot([x[i1], x[i2]], [y[i1], y[i2]], color='black')
+                ax.annotate(cost, ((x[i1]+x[i2])/2, (y[i1]+y[i2])/2))
 
         plt.show()
 
@@ -136,7 +148,7 @@ def generate_random_graph(num_vertices, num_paths=0, value_range=(0, 10), path_c
     for i in range(num_paths):
         vertex_ids = [v.id for v in graph.vertices]  # get list of vertex IDs in the graph
         rand_id1, rand_id2 = np.random.choice(vertex_ids, size=2, replace=False)
-        graph.add_path(rand_id1, rand_id2, path_costs[i])
+        graph.add_path(rand_id1, rand_id2, path_costs[i], message=False)
     
     return graph
 
