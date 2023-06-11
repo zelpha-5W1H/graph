@@ -17,7 +17,7 @@ def plot_line_segment(p1, p2, scaling_factor=1):
     p2_m = ((p1[0]*(1-scaling_factor) + p2[0]*scaling_factor), (p1[1]*(1-scaling_factor) + p2[1]*scaling_factor))
     plt.arrow(p1[0], p1[1], p2_m[0], p2_m[1], head_width=0, color='black')
 
-class Vertex():
+class Vertex:
     def __init__(self, id, value, paths=None):
         self.id = id
         self.value = value
